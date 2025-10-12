@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Personalized Chatbot</title>
+  <style>
+    :root{
+      --bg: #041a3d;
+      --panel: #0b1220;
+      --text: #e6eef8;
+      --muted: #9fb0c8;
+      --accent: #7c5cff;
+      --user: #2dd4bf;
+      --bot: #7c5cff;
+      --input-bg: rgba(255,255,255,0.03);
+    }
+
+    [data-theme="light"]{
+      --bg: #a2c5f8;
+      --panel: #ffffff;
+      --text: #0b1320;
+      --muted: #13273d;
+      --accent: #6b46ff;
+      --user: #0284c7;
+      --bot: #6b46ff;
+      --input-bg: rgba(102, 160, 187, 0.03);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:linear-gradient(180deg,var(--bg), #112b68);
+      color:var(--text);
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .container{
+      width:960px;
+      max-width:100%;
+      height:720px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      border-radius:14px;
+      overflow:hidden;
+      box-shadow:0 10px 30px rgba(2,6,23,0.6);
+      display:grid;
+      grid-template-columns:320px 1fr;
+    }
+
+    /* LEFT: controls */
+    .side{
+      padding:20px;
+      background:var(--panel);
+      border-right:1px solid rgba(255,255,255,0.03);
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .brand{display:flex; gap:12px; align-items:center}
+    .logo{
+      width:44px;
+      height:44px;
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--accent), #2dd4bf);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+    }
+    .brand h1{font-size:16px; margin:0}
+    label{font-size:12px; color:var(--muted)}
+    input[type="text"], textarea{
+      width:100%;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.04);
+      background:var(--input-bg);
+      color:var(--text);
+      font-size:14px;
+    }
+    textarea{min-height:80px; resize:vertical}
+    .btn{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+      padding:10px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      border:none;
+      background:var(--accent);
+      color:white;
+      font-weight:600;
+      transition:all 0.2s ease;
+    }
+    .ghost{background:transparent; border:1px solid rgba(255,255,255,0.06)}
+    .small{font-size:13px}
+
+    /* RIGHT: chat area */
+    .chat {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden; /* Prevent overflow of chat area */
+    }
+
+    .chat-header{
+      padding:18px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      flex-shrink: 0;
+    }
+
+    .chat-meta{display:flex; gap:12px; align-items:center}
+    .bot-avatar{
+      width:42px; height:42px; border-radius:10px;
+      background:linear-gradient(135deg,var(--bot), #2dd4bf);
+      display:flex; align-items:center; justify-content:center; font-weight:700;
+    }
+    .meta h2{margin:0; font-size:16px}
+    .meta p{margin:0; color:var(--muted); font-size:13px}
+
+    /* ✅ scrollable messages area */
+    .messages{
+      flex:1;
+      padding:20px;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+      scroll-behavior:smooth;
+    }
+
+    .bubble{
+      max-width:70%;
+      padding:12px 14px;
+      border-radius:14px;
+      line-height:1.4;
+    }
+    .bubble.user{
+      align-self:flex-end;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);
+      color:var(--text);
+    }
+    .bubble.bot{
+      align-self:flex-start;
+      background:linear-gradient(180deg, rgba(124,92,255,0.12), rgba(124,92,255,0.08));
+      color:var(--text);
+      border:1px solid rgba(124,92,255,0.08);
+    }
+    .bubble .meta{font-size:12px; color:var(--muted); margin-bottom:6px}
+
+    /* ✅ composer now sticky */
+    .composer{
+      display:flex;
+      gap:12px;
+      padding:14px;
+      border-top:1px solid rgba(255,255,255,0.03);
+      align-items:center;
+      background:var(--panel);
+      position:sticky;
+      bottom:0;
+      z-index:10;
+      flex-shrink:0;
+    }
+
+    .composer input{flex:1}
+    .composer .send{min-width:110px}
+
+    /* Responsive */
+    @media (max-width:880px){
+      .container{grid-template-columns:1fr; height:92vh}
+      .side{order:2}
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="container" role="application">
+    <aside class="side">
+      <div class="brand">
+        <div class="logo">AI</div>
+        <div>
+          <h1>Personalized Chatbot</h1>
+        </div>
+      </div>
+
+      <div>
+        <label>Chatbot name</label>
+        <input id="botNameInput" type="text" placeholder="e.g., Mom" />
+      </div>
+
+      <div>
+        <label>Personality traits</label>
+        <textarea id="traitsInput" placeholder="e.g., sweet, caring, supportive"></textarea>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        <button id="applyBtn" class="btn">Apply</button>
+        <button id="clearBtn" class="btn ghost">Clear</button>
+      </div>
+
+      <div style="margin-top:auto; display:flex; gap:8px; align-items:center; justify-content:space-between;">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <label id="modeLabel" class="small">Mode</label>
+          <button id="toggleTheme" class="btn ghost small">Dark</button>
+        </div>
+        <div style="text-align:right; font-size:12px; color:var(--muted)">v1.0</div>
+      </div>
+    </aside>
+
+    <main class="chat">
+      <div class="chat-header">
+        <div class="chat-meta">
+          <div class="bot-avatar" id="botAvatar">B</div>
+          <div class="meta">
+            <h2 id="botTitle">Your Bot</h2>
+            <p id="botTraits">Set personality Traits to Start Chating</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="messages" id="messages" aria-live="polite"></div>
+
+      <div class="composer">
+        <input id="userInput" type="text" placeholder="Say something..." autocomplete="off" />
+        <button id="sendBtn" class="btn send">Send</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      botName: 'Your Bot',
+      traits: 'gentle, helpful',
+      conversation: []
+    };
+
+    const botNameInput = document.getElementById('botNameInput');
+    const traitsInput = document.getElementById('traitsInput');
+    const applyBtn = document.getElementById('applyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const botTitle = document.getElementById('botTitle');
+    const botTraits = document.getElementById('botTraits');
+    const botAvatar = document.getElementById('botAvatar');
+    const messagesEl = document.getElementById('messages');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const toggleTheme = document.getElementById('toggleTheme');
+
+    function applyProfile(){
+      const n = botNameInput.value.trim();
+      const t = traitsInput.value.trim();
+      state.botName = n || state.botName;
+      state.traits = t || state.traits;
+      botTitle.textContent = state.botName;
+      botTraits.textContent = state.traits || 'No traits set';
+      botAvatar.textContent = (state.botName || 'Bot').slice(0,2).toUpperCase();
+
+      const system = `You are ${state.botName}, a chatbot who has the following personality: ${state.traits}. You must always reply in the same language as the user's message.`;
+      state.conversation = [{role:'system', content: system}];
+    }
+
+    applyBtn.addEventListener('click', ()=> applyProfile());
+    clearBtn.addEventListener('click', ()=>{ botNameInput.value=''; traitsInput.value=''; });
+
+    toggleTheme.addEventListener('click', ()=>{
+      const el = document.documentElement;
+      const current = el.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      el.setAttribute('data-theme', next);
+      toggleTheme.textContent = next === 'dark' ? 'Dark' : 'Light';
+      toggleTheme.style.color = next === 'dark' ? '#e6eef8' : '#547ede';
+    });
+
+    function addMessage(text, who='bot'){
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble ' + (who === 'user' ? 'user' : 'bot');
+      if(who === 'user'){
+        bubble.innerHTML = `<div class="meta">You</div><div>${escapeHtml(text)}</div>`;
+      } else {
+        bubble.innerHTML = `<div class="meta">${escapeHtml(state.botName)}</div><div>${escapeHtml(text)}</div>`;
+      }
+      messagesEl.appendChild(bubble);
+      messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' });
+    }
+
+    function escapeHtml(s){
+      return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    }
+
+    async function sendMessageToServer(userText){
+      state.conversation.push({role:'user', content:userText});
+      addMessage(userText, 'user');
+
+      const typing = document.createElement('div');
+      typing.className = 'bubble bot';
+      typing.innerHTML = `<div class="meta">${escapeHtml(state.botName)}</div><div>Typing...</div>`;
+      messagesEl.appendChild(typing);
+      messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: 'smooth' });
+
+      try{
+        const resp = await fetch('http://localhost:5000/chat', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({conversation: state.conversation})
+        });
+        const data = await resp.json();
+        typing.remove();
+        const replyText = data.reply || 'Sorry, no reply.';
+        state.conversation.push({role:'assistant', content:replyText});
+        addMessage(replyText, 'bot');
+      }catch(err){
+        typing.remove();
+        addMessage('Failed to contact server. See console for details.', 'bot');
+        console.error(err);
+      }
+    }
+
+    sendBtn.addEventListener('click', ()=>{
+      const text = userInput.value.trim();
+      if(!text) return;
+      userInput.value='';
+      sendMessageToServer(text);
+    });
+
+    userInput.addEventListener('keydown',(e)=>{
+      if(e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        sendBtn.click();
+      }
+    });
+
+    applyProfile();
+    userInput.focus();
+  </script>
+</body>
+</html>
