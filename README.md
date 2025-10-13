@@ -2,13 +2,13 @@
 
 ✔️ A modern AI chatbot built with **Flask** and **OpenAI**. <br>
 ✔️ Users can set the bot's name and personality traits and chat interactively in a browser. <br> 
-✔️ It has multilingual support; it understands and replies in the same language and tone you use, whether it’s English, French, Spanish, or more.
+✔️ It has multilingual support; it understands and replies in the same language and tone you use, whether it’s English, French, Spanish, or more.<br> 
 ⚠️ This project is intended for **testing and demonstration purposes only**. Do **not** reuse, redistribute, or deploy commercially.
 
 ---
 
 # 💡 Why I Built This
-➤ CloneChat was born from my own search for connection. I wanted to turn that feeling into something meaningful, a platform where people can shape their ideal companion or friend, express themselves freely, and feel heard, even in silence.
+➤ CloneChat was born from my own search for connection. I wanted to turn that feeling into something meaningful, a platform where people can shape their ideal companion or friend, express themselves freely, and feel heard, even in silence.<br> 
 
 ➤ To explore how AI can reflect human traits and emotions through language.
 
@@ -125,4 +125,5 @@ CloneChat.ai License - Testing Only
 ⚠️ Permission is hereby granted to clone, run, and test this project locally for personal use.  
 ⚠️ You may not modify, distribute, copy, or deploy this project publicly.  
 ⚠️ All rights reserved by the author.
+
 
