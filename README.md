@@ -5,6 +5,23 @@
 ✔️ It has multilingual support; it understands and replies in the same language and tone you use, whether it’s English, French, Spanish, or more.<br> 
 ⚠️ This project is intended for **testing and demonstration purposes only**. Do **not** reuse, redistribute, or deploy commercially.
 
+
+# Preview of the Chatting Screen
+<img width="828" height="632" alt="Screenshot 2025-10-13 023938" src="https://github.com/user-attachments/assets/d495f3c2-e976-47fe-b518-5e5f5d09757f" />
+
+
+
+# Recordings
+- Dark/Light Mode Toggle: 
+![dark and light demo](https://github.com/user-attachments/assets/8b9c3bed-88a5-4288-a636-963bc15af642)
+
+
+- Sample Chat Session: 
+![sample chat](https://github.com/user-attachments/assets/aef99cab-5414-4d8e-b69d-450d1a735d28)
+
+
+
+---
 ---
 
 # 💡 Why I Built This
@@ -29,23 +46,6 @@ CloneChat.ai/<br>
 └── requirements.txt<br>
 
 > `.env` is **not included** in this repo. Users need to create their own `.env` file with their OpenAI API key.
-
----
-
-# Preview of the Chatting Screen
-<img width="828" height="632" alt="Screenshot 2025-10-13 023938" src="https://github.com/user-attachments/assets/d495f3c2-e976-47fe-b518-5e5f5d09757f" />
-
-
-
-# Recordings
-- Dark/Light Mode Toggle: 
-![dark and light demo](https://github.com/user-attachments/assets/8b9c3bed-88a5-4288-a636-963bc15af642)
-
-
-- Sample Chat Session: 
-![sample chat](https://github.com/user-attachments/assets/aef99cab-5414-4d8e-b69d-450d1a735d28)
-
-
 
 ---
 
@@ -125,5 +125,6 @@ CloneChat.ai License - Testing Only
 ⚠️ Permission is hereby granted to clone, run, and test this project locally for personal use.  
 ⚠️ You may not modify, distribute, copy, or deploy this project publicly.  
 ⚠️ All rights reserved by the author.
+
 
 
