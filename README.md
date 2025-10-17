@@ -120,11 +120,8 @@ Open this URL in your browser to access the chatbot UI.
 (All required packages are listed in requirements.txt)
 
 ## 📌 License:
-CloneChat.ai License - Testing Only
+Under MIT license
 
-⚠️ Permission is hereby granted to clone, run, and test this project locally for personal use.  
-⚠️ You may not modify, distribute, copy, or deploy this project publicly.  
-⚠️ All rights reserved by the author.
 
 
 
